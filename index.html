@@ -1,11 +1,16 @@
 <!DOCTYPE html>
-<html lang="ku" dir="rtl">
+<html lang="ku" dir="rtl" class="dark">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Scholarships Info | پلاتفۆرمی زەمالەی خوێندن</title>
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+    }
+  </script>
   <!-- Vazirmatn Kurdish Font -->
   <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
   <!-- React & ReactDOM & Babel -->
@@ -21,7 +26,7 @@
     }
   </style>
 </head>
-<body class="bg-slate-50 text-slate-800 selection:bg-blue-700 selection:text-white">
+<body class="bg-slate-50 dark:bg-slate-950 text-slate-800 dark:text-slate-100 selection:bg-blue-700 selection:text-white transition-colors duration-300">
   <div id="root"></div>
 
   <script type="text/babel">
@@ -63,7 +68,7 @@
         duration: '٢ ساڵ (120 ECTS)',
         language: 'ئینگلیزی (١٠٠٪)',
         funding: 'سکۆلارشیپی تەواوی هەرێمی + لێخۆشبوونی ISEE',
-        description: 'تێکشکاندن و دەستنیشانکردنی نەخۆشییەکان لەسەر ئاستی گەردیلەیی و جینات، بەکارهێنانی چارەسەری خانەیی (Stem Cells) و جینی (Gene Therapy), و ئەندازیاریی شانەکان.',
+        description: 'تێکشکاندن و دەستنیشانکردنی نەخۆشییەکان لەسەر ئاستی گەردیلەیی و جینات، بەکارهێنانی چارەسەری خانەیی (Stem Cells) و جینی (Gene Therapy)، و ئەندازیاریی شانەکان.',
         languageRequirement: 'مەرجی شەهادەی زمان هەیە (IELTS یان TOEFL پێویستە)',
         category: 'ماستەر'
       },
@@ -142,6 +147,16 @@
     ];
 
     function App() {
+      const [isDarkMode, setIsDarkMode] = useState(true);
+
+      useEffect(() => {
+        if (isDarkMode) {
+          document.documentElement.classList.add('dark');
+        } else {
+          document.documentElement.classList.remove('dark');
+        }
+      }, [isDarkMode]);
+
       const [isAdmin, setIsAdmin] = useState(false);
       const [showLoginModal, setShowLoginModal] = useState(false);
       const [passwordInput, setPasswordInput] = useState('');
@@ -152,10 +167,10 @@
       const [searchQuery, setSearchQuery] = useState('');
       const [notification, setNotification] = useState(null);
 
-      // Load saved inquiries from LocalStorage
+      // Load saved inquiries
       const [inquiries, setInquiries] = useState(() => {
         try {
-          const saved = localStorage.getItem('scholarships_kurd_inquiries_v7');
+          const saved = localStorage.getItem('scholarships_kurd_inquiries_v8');
           return saved ? JSON.parse(saved) : [];
         } catch {
           return [];
@@ -164,7 +179,7 @@
 
       useEffect(() => {
         try {
-          localStorage.setItem('scholarships_kurd_inquiries_v7', JSON.stringify(inquiries));
+          localStorage.setItem('scholarships_kurd_inquiries_v8', JSON.stringify(inquiries));
         } catch (e) {}
       }, [inquiries]);
 
@@ -291,7 +306,7 @@
       const unansweredCount = inquiries.filter(i => !i.replies || i.replies.length === 0).length;
 
       return (
-        <div className="min-h-screen flex flex-col bg-slate-950 text-slate-100">
+        <div className="min-h-screen flex flex-col bg-slate-50 dark:bg-slate-950 text-slate-800 dark:text-slate-100 transition-colors duration-300">
           {/* Toast Notification */}
           {notification && (
             <div className="fixed bottom-6 left-6 z-50 bg-slate-900 text-white px-5 py-4 rounded-2xl shadow-2xl border border-amber-400 flex items-center gap-3">
@@ -303,21 +318,21 @@
           {/* Password Modal */}
           {showLoginModal && (
             <div className="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4">
-              <div className="bg-slate-900 border border-slate-800 rounded-3xl max-w-md w-full p-6 shadow-2xl space-y-5">
-                <div className="flex items-center justify-between border-b border-slate-800 pb-4">
+              <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl max-w-md w-full p-6 shadow-2xl space-y-5">
+                <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-4">
                   <div className="flex items-center gap-2.5">
                     <span className="text-2xl">🔒</span>
                     <div>
-                      <h3 className="text-lg font-extrabold text-white">چوونەژوورەوەی بەڕێوەبەر</h3>
-                      <p className="text-xs text-slate-400">تەنها بۆ ئەدمینەکانی Scholarships Info</p>
+                      <h3 className="text-lg font-extrabold text-slate-900 dark:text-white">چوونەژوورەوەی بەڕێوەبەر</h3>
+                      <p className="text-xs text-slate-500 dark:text-slate-400">تەنها بۆ ئەدمینەکانی Scholarships Info</p>
                     </div>
                   </div>
-                  <button onClick={() => setShowLoginModal(false)} className="text-slate-400 hover:text-white font-bold text-lg px-2">✕</button>
+                  <button onClick={() => setShowLoginModal(false)} className="text-slate-400 hover:text-slate-700 dark:hover:text-white font-bold text-lg px-2">✕</button>
                 </div>
 
                 <form onSubmit={handleAdminLoginSubmit} className="space-y-4">
                   <div>
-                    <label className="block text-xs font-bold text-slate-300 mb-1.5">وشەی نهێنی (Password):</label>
+                    <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">وشەی نهێنی (Password):</label>
                     <input
                       type="password"
                       required
@@ -326,14 +341,14 @@
                       onChange={(e) => setPasswordInput(e.target.value)}
                       placeholder="••••••••••••"
                       dir="ltr"
-                      className="w-full px-4 py-3 bg-slate-950 border border-slate-700 rounded-xl text-sm text-center text-white font-bold tracking-widest focus:outline-none focus:ring-2 focus:ring-blue-600"
+                      className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 rounded-xl text-sm text-center text-slate-900 dark:text-white font-bold tracking-widest focus:outline-none focus:ring-2 focus:ring-blue-600"
                     />
-                    {loginError && <p className="text-xs text-red-400 font-bold mt-2">{loginError}</p>}
+                    {loginError && <p className="text-xs text-red-600 dark:text-red-400 font-bold mt-2">{loginError}</p>}
                   </div>
 
                   <div className="flex justify-end gap-2 pt-2">
-                    <button type="button" onClick={() => setShowLoginModal(false)} className="px-4 py-2.5 rounded-xl text-xs font-bold text-slate-400 hover:bg-slate-800">پاشگەزبوونەوە</button>
-                    <button type="submit" className="px-6 py-2.5 rounded-xl text-xs font-bold bg-blue-600 hover:bg-blue-500 text-white shadow-md">چوونەژوورەوە</button>
+                    <button type="button" onClick={() => setShowLoginModal(false)} className="px-4 py-2.5 rounded-xl text-xs font-bold text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800">پاشگەزبوونەوە</button>
+                    <button type="submit" className="px-6 py-2.5 rounded-xl text-xs font-bold bg-blue-700 hover:bg-blue-800 text-white shadow-md">چوونەژوورەوە</button>
                   </div>
                 </form>
               </div>
@@ -341,32 +356,41 @@
           )}
 
           {/* Header */}
-          <header className="sticky top-0 z-40 bg-slate-950/95 backdrop-blur-md border-b border-slate-800 text-white shadow-lg">
+          <header className="sticky top-0 z-40 bg-white/90 dark:bg-slate-950/90 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 text-slate-900 dark:text-white shadow-sm transition-colors duration-300">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between gap-4">
               <div className="flex items-center gap-3.5">
-                <div className="w-12 h-12 rounded-full bg-slate-900 flex items-center justify-center shadow-md border border-slate-700 overflow-hidden relative">
-                  <img src="https://i.ibb.co/6R06K40/Gemini-Generated-Image-lk7k9ilk7k9ilk7k.jpg" alt="Europe Scholarship Logo" className="w-full h-full object-cover" />
+                <div className="w-12 h-12 rounded-full bg-white dark:bg-slate-900 flex items-center justify-center shadow-md border-2 border-amber-400 overflow-hidden relative">
+                  <img src="https://i.ibb.co/6R06K40/Gemini-Generated-Image-lk7k9ilk7k9ilk7k.jpg" alt="Scholarships Info Logo" className="w-full h-full object-cover" />
                 </div>
                 <div>
                   <div className="flex items-center gap-2">
-                    <h1 className="text-lg sm:text-xl font-extrabold text-white">Europe Scholarship</h1>
-                    <span className="hidden md:inline-block bg-amber-400/20 text-amber-300 text-xs px-2.5 py-0.5 rounded-full border border-amber-400/30 font-semibold">فەرمی</span>
+                    <h1 className="text-lg sm:text-xl font-extrabold text-slate-900 dark:text-white">Scholarships Info</h1>
+                    <span className="hidden md:inline-block bg-amber-400/20 text-amber-700 dark:text-amber-300 text-xs px-2.5 py-0.5 rounded-full border border-amber-400/30 font-semibold">فەرمی</span>
                   </div>
-                  <p className="text-xs text-slate-400">International student Opportunities Channel</p>
+                  <p className="text-xs text-slate-500 dark:text-slate-400">Scholarships Info • زانیاری زەمالەی خوێندن</p>
                 </div>
               </div>
 
               <div className="flex items-center gap-2.5 sm:gap-4">
+                {/* Theme Toggle Button */}
+                <button
+                  onClick={() => setIsDarkMode(!isDarkMode)}
+                  className="p-2.5 rounded-xl bg-slate-100 dark:bg-slate-900 border border-slate-300 dark:border-slate-800 text-slate-700 dark:text-amber-300 hover:bg-slate-200 dark:hover:bg-slate-800 transition"
+                  title="گۆڕینی دۆخی ڕووناک / تاریک"
+                >
+                  {isDarkMode ? '☀️' : '🌙'}
+                </button>
+
                 <button
                   onClick={handleAdminButtonClick}
                   className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all border ${
-                    isAdmin ? 'bg-amber-400 text-slate-950 border-amber-300 shadow-md' : 'bg-slate-900 text-slate-300 border-slate-800 hover:bg-slate-800'
+                    isAdmin ? 'bg-amber-400 text-slate-950 border-amber-300 shadow-md' : 'bg-slate-100 dark:bg-slate-900 text-slate-700 dark:text-slate-300 border-slate-300 dark:border-slate-800 hover:bg-slate-200 dark:hover:bg-slate-800'
                   }`}
                 >
                   <span>{isAdmin ? '🔓' : '🔒'}</span>
                   <span>{isAdmin ? 'چوونەدەرەوەی ئەدمین' : 'دۆخی بەڕێوەبەر'}</span>
                   {isAdmin && unansweredCount > 0 && (
-                    <span className="px-1.5 py-0.5 rounded-full text-[11px] font-bold bg-slate-950 text-amber-400">{unansweredCount}</span>
+                    <span className="px-1.5 py-0.5 rounded-full text-[11px] font-bold bg-slate-900 text-amber-400">{unansweredCount}</span>
                   )}
                 </button>
 
@@ -378,23 +402,23 @@
           </header>
 
           {isAdmin && (
-            <div className="bg-amber-400/20 border-b border-amber-400/40 px-4 py-2.5 text-center text-xs sm:text-sm font-bold text-amber-200">
+            <div className="bg-amber-400/20 border-b border-amber-400/40 px-4 py-2.5 text-center text-xs sm:text-sm font-bold text-slate-900 dark:text-amber-200">
               🛡️ تۆ ئێستا وەک <strong>بەڕێوەبەر (Admin)</strong> لە ژوورەوەیت! ناوی خوێندکاران و ژمارەی پەیوەندییان تەنها بۆ تۆ دیارە و لای خەڵک شاردراوەتەوە.
             </div>
           )}
 
           {/* Hero Section */}
-          <section className="bg-gradient-to-b from-slate-950 via-blue-950/40 to-slate-950 text-white py-14 sm:py-20 border-b border-slate-800">
+          <section className="bg-gradient-to-b from-slate-100 via-blue-50/50 to-slate-100 dark:from-slate-950 dark:via-blue-950/40 dark:to-slate-950 text-slate-900 dark:text-white py-14 sm:py-20 border-b border-slate-200 dark:border-slate-800 transition-colors duration-300">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
               <div className="lg:col-span-7 space-y-6 text-center lg:text-right">
-                <div className="inline-flex items-center gap-2 bg-emerald-950 border border-emerald-500/40 px-4 py-1.5 rounded-full text-emerald-300 text-xs sm:text-sm font-medium">
+                <div className="inline-flex items-center gap-2 bg-emerald-100 dark:bg-emerald-950 border border-emerald-300 dark:border-emerald-500/40 px-4 py-1.5 rounded-full text-emerald-800 dark:text-emerald-300 text-xs sm:text-sm font-medium">
                   <span>✨ ڕێنمایی فەرمی و زەمالەکانی خوێندن لە ئەوروپا و ئیتاڵیا 🇮🇹</span>
                 </div>
                 <h2 className="text-3xl sm:text-5xl font-black leading-tight">
                   دەرفەتەکانی خوێندنی بەکالۆریۆس، ماستەر و دکتۆرا لە ئیتاڵیا (بێ IELTS)
                 </h2>
-                <p className="text-slate-300 text-base sm:text-lg leading-relaxed">
-                  بەخێربێن بۆ پلاتفۆرمی فەرمی کەناڵی <strong>Europe Scholarship</strong>. لێرە دەتوانیت سەرجەم پرۆگرامە زانستییەکان ببینیت، زانیاریی مەرجەکان بخوێنیتەوە و داواکارییەکانت بنێریت تا تیمەکەمان وەڵامت بدەنەوە.
+                <p className="text-slate-600 dark:text-slate-300 text-base sm:text-lg leading-relaxed">
+                  بەخێربێن بۆ پلاتفۆرمی فەرمی کەناڵی <strong>Scholarships Info</strong>. لێرە دەتوانیت سەرجەم پرۆگرامە زانستییەکان ببینیت، زانیاریی مەرجەکان بخوێنیتەوە و داواکارییەکانت بنێریت تا تیمەکەمان وەڵامت بدەنەوە.
                 </p>
                 <div className="flex flex-wrap items-center justify-center lg:justify-start gap-4 pt-2">
                   <a href="#programs-section" className="bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-extrabold px-6 py-3.5 rounded-2xl shadow-lg transition">
@@ -407,26 +431,26 @@
               </div>
 
               <div className="lg:col-span-5 flex justify-center">
-                <div className="bg-slate-900 border border-slate-800 rounded-3xl p-6 shadow-2xl max-w-sm w-full text-center space-y-4">
-                  <div className="w-24 h-24 rounded-2xl bg-slate-950 mx-auto flex items-center justify-center overflow-hidden border-2 border-amber-400 shadow-xl">
+                <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 shadow-2xl max-w-sm w-full text-center space-y-4">
+                  <div className="w-24 h-24 rounded-2xl bg-slate-50 dark:bg-slate-950 mx-auto flex items-center justify-center overflow-hidden border-2 border-amber-400 shadow-xl">
                     <img src="https://i.ibb.co/6R06K40/Gemini-Generated-Image-lk7k9ilk7k9ilk7k.jpg" alt="Logo" className="w-full h-full object-cover" />
                   </div>
                   <div>
-                    <h3 className="text-xl font-bold text-white">Europe Scholarship</h3>
-                    <p className="text-sky-400 text-sm font-medium mt-0.5" dir="ltr">@Scholarships_KURD</p>
+                    <h3 className="text-xl font-bold text-slate-900 dark:text-white">Scholarships Info</h3>
+                    <p className="text-sky-600 dark:text-sky-400 text-sm font-medium mt-0.5" dir="ltr">@Scholarships_KURD</p>
                   </div>
-                  <div className="grid grid-cols-3 gap-2 bg-slate-950 p-3.5 rounded-2xl border border-slate-800">
+                  <div className="grid grid-cols-3 gap-2 bg-slate-100 dark:bg-slate-950 p-3.5 rounded-2xl border border-slate-200 dark:border-slate-800">
                     <div>
-                      <div className="text-lg font-extrabold text-amber-400">١٠٠٪</div>
-                      <div className="text-[11px] text-slate-400">سکۆلارشیپ</div>
+                      <div className="text-lg font-extrabold text-amber-500">١٠٠٪</div>
+                      <div className="text-[11px] text-slate-500 dark:text-slate-400">سکۆلارشیپ</div>
                     </div>
-                    <div className="border-x border-slate-800">
-                      <div className="text-lg font-extrabold text-sky-400">{inquiries.length}</div>
-                      <div className="text-[11px] text-slate-400">داواکاری</div>
+                    <div className="border-x border-slate-200 dark:border-slate-800">
+                      <div className="text-lg font-extrabold text-sky-600 dark:text-sky-400">{inquiries.length}</div>
+                      <div className="text-[11px] text-slate-500 dark:text-slate-400">داواکاری</div>
                     </div>
                     <div>
-                      <div className="text-lg font-extrabold text-emerald-400">٩+</div>
-                      <div className="text-[11px] text-slate-400">پرۆگرام</div>
+                      <div className="text-lg font-extrabold text-emerald-600 dark:text-emerald-400">٩+</div>
+                      <div className="text-[11px] text-slate-500 dark:text-slate-400">پرۆگرام</div>
                     </div>
                   </div>
                   <a href="https://t.me/Scholarships_KURD" target="_blank" rel="noopener noreferrer" className="block w-full py-3 bg-sky-500 hover:bg-sky-400 text-white font-bold rounded-xl text-xs transition">
@@ -441,44 +465,44 @@
           <main id="programs-section" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-16 flex-1">
             
             {/* Filter Buttons */}
-            <div className="flex flex-wrap items-center justify-between gap-4 border-b border-slate-800 pb-6">
+            <div className="flex flex-wrap items-center justify-between gap-4 border-b border-slate-200 dark:border-slate-800 pb-6">
               <div>
-                <h3 className="text-2xl font-extrabold text-white">📚 لیستی پرۆگرامە بەردەستەکانی خوێندن</h3>
-                <p className="text-sm text-slate-400 mt-1">زانیاری زیاتر وەک مەرجەکان و پێداویستیەکانی ئەم پرگرامە لە کەناڵەکە هەیە[cite: 4].</p>
+                <h3 className="text-2xl font-extrabold text-slate-900 dark:text-white">📚 لیستی پرۆگرامە بەردەستەکانی خوێندن</h3>
+                <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">زانیاری زیاتر وەک مەرجەکان و پێداویستیەکانی ئەم پرگرامە لە کەناڵەکە هەیە[cite: 4].</p>
               </div>
 
-              <div className="flex gap-2 bg-slate-900 border border-slate-800 p-1.5 rounded-2xl text-xs font-bold">
-                <button onClick={() => setSelectedCategory('all')} className={`px-4 py-2 rounded-xl transition ${selectedCategory === 'all' ? 'bg-blue-600 text-white shadow-sm' : 'text-slate-400 hover:text-white'}`}>هەموو پرۆگرامەکان</button>
-                <button onClick={() => setSelectedCategory('بەکالۆریۆس')} className={`px-4 py-2 rounded-xl transition ${selectedCategory === 'بەکالۆریۆس' ? 'bg-blue-600 text-white shadow-sm' : 'text-slate-400 hover:text-white'}`}>بەکالۆریۆس</button>
-                <button onClick={() => setSelectedCategory('ماستەر')} className={`px-4 py-2 rounded-xl transition ${selectedCategory === 'ماستەر' ? 'bg-blue-600 text-white shadow-sm' : 'text-slate-400 hover:text-white'}`}>ماستەر</button>
+              <div className="flex gap-2 bg-slate-200 dark:bg-slate-900 border border-slate-300 dark:border-slate-800 p-1.5 rounded-2xl text-xs font-bold">
+                <button onClick={() => setSelectedCategory('all')} className={`px-4 py-2 rounded-xl transition ${selectedCategory === 'all' ? 'bg-blue-600 text-white shadow-sm' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'}`}>هەموو پرۆگرامەکان</button>
+                <button onClick={() => setSelectedCategory('بەکالۆریۆس')} className={`px-4 py-2 rounded-xl transition ${selectedCategory === 'بەکالۆریۆس' ? 'bg-blue-600 text-white shadow-sm' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'}`}>بەکالۆریۆس</button>
+                <button onClick={() => setSelectedCategory('ماستەر')} className={`px-4 py-2 rounded-xl transition ${selectedCategory === 'ماستەر' ? 'bg-blue-600 text-white shadow-sm' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'}`}>ماستەر</button>
               </div>
             </div>
 
             {/* Programs Cards Grid */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {filteredPrograms.map((prog) => (
-                <div key={prog.id} className="bg-slate-900 border border-slate-800 rounded-3xl shadow-sm hover:border-blue-500 transition p-6 flex flex-col justify-between space-y-5">
+                <div key={prog.id} className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl shadow-sm hover:border-blue-500 transition p-6 flex flex-col justify-between space-y-5">
                   <div className="space-y-3">
                     <div className="flex items-center justify-between gap-2">
-                      <span className="bg-blue-950 text-blue-300 border border-blue-800 text-xs font-bold px-3 py-1 rounded-full">{prog.country}</span>
-                      <span className="bg-emerald-950 text-emerald-300 border border-emerald-800 text-xs font-bold px-3 py-1 rounded-full">{prog.degree}</span>
+                      <span className="bg-blue-50 dark:bg-blue-950 text-blue-800 dark:text-blue-300 border border-blue-200 dark:border-blue-800 text-xs font-bold px-3 py-1 rounded-full">{prog.country}</span>
+                      <span className="bg-emerald-50 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800 text-xs font-bold px-3 py-1 rounded-full">{prog.degree}</span>
                     </div>
 
-                    <h4 className="text-base font-extrabold text-white leading-snug">{prog.title}</h4>
+                    <h4 className="text-base font-extrabold text-slate-900 dark:text-white leading-snug">{prog.title}</h4>
 
-                    <div className="text-xs text-slate-300 space-y-1 bg-slate-950 p-3 rounded-2xl border border-slate-800">
+                    <div className="text-xs text-slate-600 dark:text-slate-300 space-y-1 bg-slate-50 dark:bg-slate-950 p-3 rounded-2xl border border-slate-200 dark:border-slate-800">
                       <p>⏳ <strong>ماوە:</strong> {prog.duration}</p>
                       <p>🗣️ <strong>زمان:</strong> {prog.language}</p>
                       <p>💰 <strong>فەند:</strong> {prog.funding}</p>
                     </div>
 
-                    <p className="text-xs text-slate-300 leading-relaxed">{prog.description}</p>
+                    <p className="text-xs text-slate-700 dark:text-slate-300 leading-relaxed">{prog.description}</p>
 
-                    <div className="bg-amber-950/60 border border-amber-700/50 p-3 rounded-xl text-xs font-extrabold text-amber-300">
+                    <div className="bg-amber-50 dark:bg-amber-950/60 border border-amber-200 dark:border-amber-700/50 p-3 rounded-xl text-xs font-extrabold text-amber-900 dark:text-amber-300">
                       📋 <strong>{prog.languageRequirement}</strong>
                     </div>
 
-                    <div className="bg-sky-950/60 border border-sky-800/50 p-2.5 rounded-xl text-[11px] text-sky-200 flex items-center justify-between">
+                    <div className="bg-sky-50 dark:bg-sky-950/60 border border-sky-200 dark:border-sky-800/50 p-2.5 rounded-xl text-[11px] text-sky-800 dark:text-sky-200 flex items-center justify-between">
                       <span>ℹ️ زانیاری زیاتر لە کەناڵەکە هەیە[cite: 4].</span>
                       <a href="https://t.me/Scholarships_KURD" target="_blank" rel="noopener noreferrer" className="font-bold underline">سەردانی کەناڵ ↗</a>
                     </div>
@@ -495,11 +519,11 @@
             </div>
 
             {/* Inquiry Form & Live Comments */}
-            <section className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start pt-10 border-t border-slate-800">
+            <section className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start pt-10 border-t border-slate-200 dark:border-slate-800">
               {/* Form */}
               <div id="inquiry-form-section" className="lg:col-span-5 lg:sticky lg:top-28">
-                <div className="bg-slate-900 border border-slate-800 rounded-3xl shadow-xl overflow-hidden">
-                  <div className="bg-gradient-to-l from-slate-950 to-blue-950 p-6 text-white space-y-1 border-b border-slate-800">
+                <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl shadow-xl overflow-hidden">
+                  <div className="bg-gradient-to-l from-slate-900 to-blue-950 p-6 text-white space-y-1 border-b border-slate-200 dark:border-slate-800">
                     <h3 className="text-lg font-extrabold">💬 ناردنی داواکاری و پرسیار بۆ ئەدمین</h3>
                     <p className="text-xs text-slate-300">پرۆگرامەکەت هەڵبژێرە و زانیارییەکانت بنێرە (ناوەکەت لای خەڵک دەرناکەوێت)</p>
                     <div className="pt-2 text-xs text-amber-300 font-bold">
@@ -508,18 +532,18 @@
                   </div>
                   <form onSubmit={handleSubmitInquiry} className="p-6 space-y-4">
                     <div>
-                      <label className="block text-xs font-bold text-slate-300 mb-1">ناوی تەواو (تەنها ئەدمین دەیبینێت) *</label>
+                      <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">ناوی تەواو (تەنها ئەدمین دەیبینێت) *</label>
                       <input
                         type="text"
                         required
                         value={studentName}
                         onChange={(e) => setStudentName(e.target.value)}
                         placeholder="بۆ نموونە: ئارام محەمەد"
-                        className="w-full px-4 py-2.5 bg-slate-950 border border-slate-700 rounded-xl text-sm text-white"
+                        className="w-full px-4 py-2.5 bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 rounded-xl text-sm text-slate-900 dark:text-white"
                       />
                     </div>
                     <div>
-                      <label className="block text-xs font-bold text-slate-300 mb-1">یوزەرنەیمی تێلگرام یان ژمارە مۆبایل (تەنها ئەدمین دەیبینێت) *</label>
+                      <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">یوزەرنەیمی تێلگرام یان ژمارە مۆبایل (تەنها ئەدمین دەیبینێت) *</label>
                       <input
                         type="text"
                         required
@@ -527,15 +551,15 @@
                         onChange={(e) => setStudentContact(e.target.value)}
                         placeholder="@username یان 0770XXXXXXX"
                         dir="ltr"
-                        className="w-full px-4 py-2.5 bg-slate-950 border border-slate-700 rounded-xl text-sm text-right text-white"
+                        className="w-full px-4 py-2.5 bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 rounded-xl text-sm text-right text-slate-900 dark:text-white"
                       />
                     </div>
                     <div>
-                      <label className="block text-xs font-bold text-slate-300 mb-1">پرۆگرام یان بەشی داواکراو</label>
+                      <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">پرۆگرام یان بەشی داواکراو</label>
                       <select
                         value={selectedProgram}
                         onChange={(e) => setSelectedProgram(e.target.value)}
-                        className="w-full px-3 py-2.5 bg-slate-950 border border-slate-700 rounded-xl text-xs sm:text-sm text-white"
+                        className="w-full px-3 py-2.5 bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 rounded-xl text-xs sm:text-sm text-slate-900 dark:text-white"
                       >
                         {PROGRAMS_DATA.map((p, idx) => (
                           <option key={idx} value={p.title}>{p.title}</option>
@@ -543,18 +567,18 @@
                       </select>
                     </div>
                     <div>
-                      <label className="block text-xs font-bold text-slate-300 mb-1">پرسیار یان داواکارییەکەت *</label>
+                      <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">پرسیار یان داواکارییەکەت *</label>
                       <textarea
                         rows="4"
                         required
                         value={questionText}
                         onChange={(e) => setQuestionText(e.target.value)}
                         placeholder="سڵاو، دەمەوێت ناوم تۆمار بکەن بۆ ئەم بەشە و زانیاری زیاترم پێ بدەن..."
-                        className="w-full p-3.5 bg-slate-950 border border-slate-700 rounded-xl text-sm text-white"
+                        className="w-full p-3.5 bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 rounded-xl text-sm text-slate-900 dark:text-white"
                       ></textarea>
                     </div>
                     <button type="submit" className="w-full py-3.5 px-6 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-xl shadow-md transition">
-                      ✈️ ناردنی داواکاری بۆ تیمی Europe Scholarship
+                      ✈️ ناردنی داواکاری بۆ تیمی Scholarships Info
                     </button>
                   </form>
                 </div>
@@ -562,15 +586,15 @@
 
               {/* Feed */}
               <div className="lg:col-span-7 space-y-4">
-                <div className="bg-slate-900 border border-slate-800 rounded-3xl p-6 shadow-sm space-y-4">
+                <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 shadow-sm space-y-4">
                   <div className="flex flex-wrap items-center justify-between gap-4">
-                    <h3 className="text-xl font-extrabold text-white">
+                    <h3 className="text-xl font-extrabold text-slate-900 dark:text-white">
                       پرسیار و داواکارییەکانی خوێندکاران ({filteredInquiries.length})
                     </h3>
-                    <div className="flex gap-1.5 bg-slate-950 p-1 rounded-xl text-xs font-bold border border-slate-800">
-                      <button onClick={() => setStatusFilter('all')} className={`px-3 py-1.5 rounded-lg ${statusFilter === 'all' ? 'bg-slate-800 text-white shadow-sm' : 'text-slate-400'}`}>هەمووی</button>
-                      <button onClick={() => setStatusFilter('unanswered')} className={`px-3 py-1.5 rounded-lg ${statusFilter === 'unanswered' ? 'bg-amber-400 text-slate-950' : 'text-slate-400'}`}>وەڵامنەدراوە ({unansweredCount})</button>
-                      <button onClick={() => setStatusFilter('answered')} className={`px-3 py-1.5 rounded-lg ${statusFilter === 'answered' ? 'bg-emerald-600 text-white' : 'text-slate-400'}`}>وەڵامدراوە</button>
+                    <div className="flex gap-1.5 bg-slate-100 dark:bg-slate-950 p-1 rounded-xl text-xs font-bold border border-slate-200 dark:border-slate-800">
+                      <button onClick={() => setStatusFilter('all')} className={`px-3 py-1.5 rounded-lg ${statusFilter === 'all' ? 'bg-white dark:bg-slate-800 text-slate-900 dark:text-white shadow-sm' : 'text-slate-600 dark:text-slate-400'}`}>هەمووی</button>
+                      <button onClick={() => setStatusFilter('unanswered')} className={`px-3 py-1.5 rounded-lg ${statusFilter === 'unanswered' ? 'bg-amber-400 text-slate-950' : 'text-slate-600 dark:text-slate-400'}`}>وەڵامنەدراوە ({unansweredCount})</button>
+                      <button onClick={() => setStatusFilter('answered')} className={`px-3 py-1.5 rounded-lg ${statusFilter === 'answered' ? 'bg-emerald-600 text-white' : 'text-slate-600 dark:text-slate-400'}`}>وەڵامدراوە</button>
                     </div>
                   </div>
                   <input
@@ -578,66 +602,66 @@
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                     placeholder="🔍 گەڕان لە ناو داواکارییەکان..."
-                    className="w-full px-4 py-2 bg-slate-950 border border-slate-800 rounded-xl text-xs text-white"
+                    className="w-full px-4 py-2 bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-800 rounded-xl text-xs text-slate-900 dark:text-white"
                   />
                 </div>
 
                 {filteredInquiries.length === 0 ? (
-                  <div className="bg-slate-900 border border-slate-800 rounded-3xl p-12 text-center text-slate-500 space-y-2">
+                  <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-12 text-center text-slate-400 space-y-2">
                     <div className="text-4xl">💬</div>
-                    <p className="text-sm font-bold text-slate-400">هێشتا هیچ پرسیار یان داواکارییەک نییە</p>
+                    <p className="text-sm font-bold text-slate-600 dark:text-slate-400">هێشتا هیچ پرسیار یان داواکارییەک نییە</p>
                     <p className="text-xs">یەکەم کەس بە کە داواکارییەکەت لە ڕێگەی فۆڕمەکەوە بنێریت!</p>
                   </div>
                 ) : (
                   filteredInquiries.map((item) => {
                     const hasReplies = item.replies && item.replies.length > 0;
                     return (
-                      <div key={item.id} className="bg-slate-900 border border-slate-800 rounded-3xl p-6 space-y-4 shadow-sm">
+                      <div key={item.id} className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 space-y-4 shadow-sm">
                         <div className="flex items-start justify-between">
                           <div>
                             {isAdmin ? (
                               <div className="space-y-1">
-                                <h4 className="font-bold text-white text-sm flex items-center gap-2">
+                                <h4 className="font-bold text-slate-900 dark:text-white text-sm flex items-center gap-2">
                                   <span>👤 {item.studentName}</span>
-                                  <span className="text-[10px] bg-amber-950 text-amber-300 border border-amber-800 px-2 py-0.5 rounded-md font-bold">تەنها بۆ ئەدمین دیارە</span>
+                                  <span className="text-[10px] bg-amber-100 dark:bg-amber-950 text-amber-800 dark:text-amber-300 border border-amber-300 dark:border-amber-800 px-2 py-0.5 rounded-md font-bold">تەنها بۆ ئەدمین دیارە</span>
                                 </h4>
                                 {item.studentContact && (
-                                  <span className="inline-block text-xs bg-blue-950 text-blue-300 px-2.5 py-0.5 rounded-md font-bold border border-blue-800" dir="ltr">
+                                  <span className="inline-block text-xs bg-blue-50 dark:bg-blue-950 text-blue-700 dark:text-blue-300 px-2.5 py-0.5 rounded-md font-bold border border-blue-200 dark:border-blue-800" dir="ltr">
                                     📞 پەیوەندی: {item.studentContact}
                                   </span>
                                 )}
                               </div>
                             ) : (
-                              <h4 className="font-bold text-slate-400 text-sm flex items-center gap-1.5">
+                              <h4 className="font-bold text-slate-500 dark:text-slate-400 text-sm flex items-center gap-1.5">
                                 <span>👤 خوێندکار</span>
-                                <span className="text-[11px] bg-slate-800 text-slate-300 px-2 py-0.5 rounded-md font-normal">ناو پارێزراوە 🔒</span>
+                                <span className="text-[11px] bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 px-2 py-0.5 rounded-md font-normal">ناو پارێزراوە 🔒</span>
                               </h4>
                             )}
                           </div>
                           <div className="flex items-center gap-2">
-                            <span className={`text-xs font-bold px-2.5 py-1 rounded-full ${hasReplies ? 'bg-emerald-950 text-emerald-300 border border-emerald-800' : 'bg-amber-950 text-amber-300 border border-amber-800'}`}>
+                            <span className={`text-xs font-bold px-2.5 py-1 rounded-full ${hasReplies ? 'bg-emerald-50 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800' : 'bg-amber-50 dark:bg-amber-950 text-amber-800 dark:text-amber-300 border border-amber-200 dark:border-amber-800'}`}>
                               {hasReplies ? '✅ وەڵامدراوەتەوە' : '⏳ چاوەڕوانی وەڵام'}
                             </span>
                             {isAdmin && (
-                              <button onClick={() => handleDeleteInquiry(item.id)} className="text-red-400 text-xs font-bold px-2.5 py-1 bg-red-950 border border-red-800 hover:bg-red-900 rounded-lg">سڕینەوە</button>
+                              <button onClick={() => handleDeleteInquiry(item.id)} className="text-red-600 dark:text-red-400 text-xs font-bold px-2.5 py-1 bg-red-50 dark:bg-red-950 border border-red-200 dark:border-red-800 hover:bg-red-100 dark:hover:bg-red-900 rounded-lg">سڕینەوە</button>
                             )}
                           </div>
                         </div>
 
-                        <div className="text-xs font-bold text-blue-300 bg-blue-950 border border-blue-800 px-3 py-1.5 rounded-lg inline-block">
+                        <div className="text-xs font-bold text-blue-900 dark:text-blue-300 bg-blue-50 dark:bg-blue-950 border border-blue-200 dark:border-blue-800 px-3 py-1.5 rounded-lg inline-block">
                           🎓 {item.programName}
                         </div>
 
-                        <p className="text-slate-200 text-sm bg-slate-950 p-4 rounded-2xl border border-slate-800">
+                        <p className="text-slate-800 dark:text-slate-200 text-sm bg-slate-50 dark:bg-slate-950 p-4 rounded-2xl border border-slate-200 dark:border-slate-800">
                           {item.question}
                         </p>
 
                         {hasReplies && (
                           <div className="space-y-2 pr-4 border-r-2 border-amber-400">
                             {item.replies.map((rep) => (
-                              <div key={rep.id} className="bg-slate-950 border border-slate-800 text-white p-4 rounded-2xl space-y-1">
+                              <div key={rep.id} className="bg-slate-900 text-white p-4 rounded-2xl space-y-1 border border-slate-800">
                                 <div className="text-xs font-extrabold text-amber-300">🛡️ {rep.adminName}</div>
-                                <p className="text-xs sm:text-sm text-slate-200 leading-relaxed">{rep.text}</p>
+                                <p className="text-xs sm:text-sm text-slate-100 leading-relaxed">{rep.text}</p>
                               </div>
                             ))}
                           </div>
@@ -645,23 +669,23 @@
 
                         {isAdmin && (
                           replyingToId === item.id ? (
-                            <div className="space-y-2 bg-slate-950 p-3 rounded-2xl border border-blue-800">
+                            <div className="space-y-2 bg-slate-50 dark:bg-slate-950 p-3 rounded-2xl border border-blue-300 dark:border-blue-800">
                               <textarea
                                 rows="2"
                                 value={replyText}
                                 onChange={(e) => setReplyText(e.target.value)}
                                 placeholder="وەڵامی فەرمی بنووسە..."
-                                className="w-full p-2.5 bg-slate-900 border border-slate-700 rounded-xl text-sm text-white"
+                                className="w-full p-2.5 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl text-sm text-slate-900 dark:text-white"
                               ></textarea>
                               <div className="flex justify-end gap-2">
-                                <button onClick={() => setReplyingToId(null)} className="px-3 py-1.5 text-xs font-bold text-slate-400">پاشگەزبوونەوە</button>
+                                <button onClick={() => setReplyingToId(null)} className="px-3 py-1.5 text-xs font-bold text-slate-600 dark:text-slate-400">پاشگەزبوونەوە</button>
                                 <button onClick={() => handleAdminReply(item.id)} className="px-4 py-1.5 text-xs font-bold bg-blue-600 text-white rounded-xl">بڵاوکردنەوەی وەڵام</button>
                               </div>
                             </div>
                           ) : (
                             <button
                               onClick={() => { setReplyingToId(item.id); setReplyText(''); }}
-                              className="text-xs font-bold text-blue-300 bg-blue-950 border border-blue-800 hover:bg-blue-900 px-3.5 py-2 rounded-xl transition"
+                              className="text-xs font-bold text-blue-700 dark:text-blue-300 bg-blue-50 dark:bg-blue-950 border border-blue-200 dark:border-blue-800 hover:bg-blue-100 dark:hover:bg-blue-900 px-3.5 py-2 rounded-xl transition"
                             >
                               ↩️ وەڵامدانەوەی ئەم خوێندکارە (تایبەت بە ئەدمین)
                             </button>
@@ -676,10 +700,10 @@
           </main>
 
           {/* Footer */}
-          <footer className="bg-slate-950 text-slate-400 border-t border-slate-800 py-8 mt-16">
+          <footer className="bg-white dark:bg-slate-950 text-slate-500 dark:text-slate-400 border-t border-slate-200 dark:border-slate-800 py-8 mt-16 transition-colors duration-300">
             <div className="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-4">
-              <div className="text-sm font-bold text-white">Europe Scholarship • International student Opportunities Channel</div>
-              <div className="text-xs font-bold text-slate-300 text-center sm:text-left">
+              <div className="text-sm font-bold text-slate-900 dark:text-white">Scholarships Info • Europe Scholarship</div>
+              <div className="text-xs font-bold text-slate-600 dark:text-slate-300 text-center sm:text-left">
                 بۆ پەیوەندیکردن سەردانی کەناڵەکەمان بکەن و لەوێ ئەدمینەکان بدۆزنەوە.
               </div>
             </div>
